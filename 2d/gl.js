@@ -28,7 +28,6 @@ function main() {
     const canvas = document.querySelector('#glcanvas');
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');//获得上下文（一个相关的对象）
 
-    // If we don't have a GL context, give up now
     if (!gl) {
         alert('Unable to initialize WebGL. Your browser or machine may not support it.');
         return;
@@ -37,10 +36,6 @@ function main() {
     // 根据着色器代码获得着色器程序
     const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
-    // Collect all the info needed to use the shader program.
-    // Look up which attributes our shader program is using
-    // for aVertexPosition, aVevrtexColor and also
-    // look up uniform locations.
     const programInfo = {
         program: shaderProgram,
         attribLocations: {
@@ -92,13 +87,10 @@ function initShaderProgram(gl, vsSource, fsSource) {
 function loadShader(gl, type, source) {
     const shader = gl.createShader(type);
 
-    // Send the source to the shader object
     gl.shaderSource(shader, source);
 
-    // Compile the shader program
     gl.compileShader(shader);
 
-    // See if it compiled successfully
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
         gl.deleteShader(shader);
@@ -120,19 +112,16 @@ function initBuffers(gl) {
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
     const positions = [
-        1.0, 1.0,
+        1.0, 1.0,  
         -1.0, 1.0,
         1.0, -1.0,
         -1.0, -1.0,
     ];
 
-    // Now pass the list of positions into WebGL to build the
-    // shape. We do this by creating a Float32Array from the
-    // JavaScript array, then use it to fill the current buffer.
+    //顶点位置的缓冲
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-    // Now set up the colors for the vertices
-    // RGBA
+    //每个顶点的颜色，RGBA
     var colors = [
         1.0, 1.0, 1.0, 1.0,    // white
         1.0, 0.0, 0.0, 1.0,    // red
@@ -151,7 +140,7 @@ function initBuffers(gl) {
 }
 
 //
-// Draw the scene.
+// 画第一帧和之前的初始化工作
 //
 function drawScene(gl, programInfo, buffers, rotate) {
     //gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
@@ -218,7 +207,7 @@ function drawScene(gl, programInfo, buffers, rotate) {
     // Tell WebGL how to pull out the colors from the color buffer
     // into the vertexColor attribute.
     {
-        const numComponents = 4;
+        const numComponents = 4; //四个顶点
         const type = gl.FLOAT;
         const normalize = false;
         const stride = 0;
@@ -244,7 +233,7 @@ function drawScene(gl, programInfo, buffers, rotate) {
         }
         mat4.rotate(modelViewMatrix,
             modelViewMatrix,  // matrix to rotate
-            rotate,   // amount to rotate in radians
+            rotate,           // amount to rotate in radians
             [0, 0, 1]);       // axis to rotate around
         mat4.translate(modelViewMatrix,     // destination matrix
             modelViewMatrix,     // matrix to translate

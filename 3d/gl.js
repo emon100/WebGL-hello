@@ -11,10 +11,28 @@ const cubeRotation = new Proxy({
     }
 });
 
+let mouseDown = null;
+function onDown(ev){
+    mouseDown = ev;
+}
+function onMove(ev){
+    if(mouseDown){
+        cubeRotation.rx=cubeRotation.rx+(ev.clientX - mouseDown.clientX)/25;
+        cubeRotation.ry=cubeRotation.ry+(ev.clientY - mouseDown.clientY)/25;
+        mouseDown=ev;
+    }
+}
+function onUp(ev){
+    mouseDown=null;
+}
+
 // Start here
 //
 function main() {
     const canvas = document.querySelector('#glcanvas');
+    canvas.addEventListener('mousedown',onDown);
+    canvas.addEventListener('mousemove',onMove);
+    canvas.addEventListener('mouseup',onUp);
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
     // If we don't have a GL context, give up now
