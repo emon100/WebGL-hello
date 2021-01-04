@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hello webgl</title>
+    <style>
+        #c {
+            padding: 10px;
+            border: 5px solid;
+            border-color: blue;
+        }
+    </style>
+     <script src="./gl-matrix-min.js"></script>
+</head>
+
+<body onload=>
+    <div id="c">
+        <canvas id="glcanvas" width="1024" height="768">
+    </div>
+    <input type="range" step="1" min="-100" max="100" oninput="renderFn(this.value/100)"> rotation</input>
+    
+     <script src="./gl.js"></script>
+</body>
+
+</html>
