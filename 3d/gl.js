@@ -26,6 +26,22 @@ function onUp(ev){
     mouseDown=null;
 }
 
+let touchDown = null;
+function ontouchdown(e){
+    touchDown = {x:e.touches[0].pageX,y:e.touches[0].pageY};
+}
+function ontouchmove(e){
+    if(touchDown){
+        cubeRotation.rx=cubeRotation.rx+(e.touches[0].pageX - touchDown.x )/25;
+        cubeRotation.ry=cubeRotation.ry+(e.touches[0].pageY - touchDown.y)/25;
+        touchDown = {x:e.touches[0].pageX,y:e.touches[0].pageY};
+    }
+}
+function ontouchend(e){
+    touchDown = null;
+}
+
+
 // Start here
 //
 function main() {
@@ -33,6 +49,9 @@ function main() {
     canvas.addEventListener('mousedown',onDown);
     canvas.addEventListener('mousemove',onMove);
     canvas.addEventListener('mouseup',onUp);
+    canvas.addEventListener('touchstart',ontouchdown);
+    canvas.addEventListener('touchmove',ontouchmove);
+    canvas.addEventListener('touchend',ontouchend);
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
     // If we don't have a GL context, give up now
